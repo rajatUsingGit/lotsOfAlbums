@@ -2,6 +2,8 @@ package com.example.lotsofalbums
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -17,16 +19,11 @@ class MainViewModel : ViewModel() {
 
     private val repository = Repository()
 
-    fun refreshAlbumsList() {
+    fun refreshData() {
         viewModelScope.launch {
             _albums.value = repository.getAlbumsFromNetwork()
+            _photos.value = repository.getPhotosFromNetwork(_albums.value[0].id)
         }
     }
-
-/*    fun refreshAlbumsPhotos(id: Int) {
-        viewModelScope.launch {
-            _photos.value = repository.getPhotosFromNetwork(id)
-        }
-    }*/
 
 }
